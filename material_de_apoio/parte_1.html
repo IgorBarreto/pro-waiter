@@ -1,0 +1,891 @@
+<!doctype html>
+<html lang="en" class="h-100">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="prism.css">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+
+    <title>ProWaiter | Parte 1</title>
+  </head>
+  <body class="h-100 text-left text-white bg-dark">
+    <div class="container d-flex w-100 h-100 p-3 mx-auto flex-column">
+      <header class="mb-auto">
+        <div>
+          <h1>ProWaiter</h1>
+          <h3 class="float-md-start mb-0">Parte 1: Criando um sistema de atendimento e gerenciamento para restaurantes.</h3>
+        </div>
+      </header>
+      <div style="margin-top:30px"></div>
+
+      <section id="passo-1">
+        <h1>Passo 1: Criar e ativar o ambiente virtual do projeto</h1>
+        <p>
+          Com a distribuição do Python <b>Anaconda</b> instalada, podemos criar
+          um novo ambiente virtual para o projeto através do seguinte comando,
+          que deve ser executado no terminal de comando do seu sistema operacional
+          ou no Anaconda Prompt:
+        </p>
+
+        <pre class="language-python">
+          <code class="language-python">
+            conda create -n pro_waiter python
+          </code>
+        </pre>
+
+        <p>
+          O comando anterior cria um novo ambiente virtual chamado "pro_waiter".
+          Para ativar o ambiente virtual recém criado, utilizamos o seguinte
+          comando:
+        </p>
+
+        <pre class="language-python">
+          <code class="language-python">
+            conda activate pro_waiter
+          </code>
+        </pre>
+
+        <h4>Observação:</h4>
+        <p>
+            Se você souber como criar e manter um ambiente virtual sem a utilização
+            do Anaconda, fique a vontade para fazer da forma como já está acostumado.
+        </p>
+        <hr>
+      </section>
+
+      <section id="passo-2">
+        <h1>Passo 2: Instalar o Django no ambiente virtual criado</h2>
+        <p>Com o ambiente virtual ativado, podemos baixar o Django através do pip:</p>
+        <pre class="language-python">
+          <code class="language-python">
+            pip install django
+          </code>
+        </pre>
+        <hr>
+      </section>
+
+      <section id="passo-3">
+        <h1>Passo 3: Criar o projeto</h1>
+
+        <p>
+          Com as configurações iniciais realizadas, podemos criar a estrutura inicial
+          do projeto Django através do seguinte comando (lembre-se de garantir
+          que o ambiente virtual criado nos passos anteriores está ativado):
+        </p>
+
+        <pre class="language-python">
+          <code class="language-python">
+            django-admin startproject pro_waiter
+          </code>
+        </pre>
+
+        <p>
+          O comando acima criará um novo diretório com a estrutura inicial de um
+          projeto Django. Lembre-se de que a pasta do projeto será criada no
+          diretório que estava ativo no momento em que o comando foi executado.
+          Então, se você quiser criar o projeto em sua área de trabalho, por
+          exemplo, primeiro precisa mudar o diretório ativo para o diretório da
+          área de trabalho.
+        </p>
+
+        <p>
+          Você pode navegar entre diretórios através do comando <b>cd</b> no
+          prompt de Comando.
+        </p>
+
+        <p>
+          O comando criará uma nova pasta, com o nome que você deu ao projeto
+          (pro_waiter). Dentro dessa pasta, haverá um arquivo Python chamado <i>manage.py</i>
+          e uma outra pasta, com o mesmo nome do projeto, contendo mais alguns arquivos. O projeto
+          terá a seguinte estrutura inicial:
+        </p>
+
+        <pre>
+          <code class="language-treeview">
+            pro_waiter/
+            |-- pro_waiter/
+            |   |-- __init__.py
+            |   |-- asgi.py
+            |   |-- settings.py
+            |   |-- urls.py
+            |   `-- wsgi.py
+            `-- manage.py
+          </code>
+        </pre>
+
+        <p>
+          Adicione o diretório do projeto ao seu editor de texto preferido (eu
+          gosto do <a href="https://atom.io/">Atom</a>) e vamos começar a programar.
+        </p>
+        <hr>
+      </section>
+
+      <section id="passo-4">
+        <h1>Passo 4: Criando o app 'usuarios'</h1>
+        <p>
+          Um projeto Django deve ser dividido em apps, de modo que cada app agrupe
+          uma funcionalidade específica. O primeiro app que vamos criar em nosso
+          projeto se chama <b>usuarios</b>. Como o nome sugere, ele será utilizado
+          para cuidar de tudo que estiver envolvido com contas de usuários da
+          nossa aplicação.
+        </p>
+
+        <p>
+          Com o ambiente virtual criado ativado, e estando dentro do diretório
+          do projeto (o diretório que contém o arquivo 'manage.py'), execute o
+          seguinte comando para criar o app usuarios:
+        </p>
+
+        <pre class="language-python">
+          <code class="language-python">
+            python manage.py startapp usuarios
+          </code>
+        </pre>
+
+        <p>
+          O comando criará uma nova pasta com o nome do app (usuarios) dentro do
+          diretório principal do projeto. Essa pasta vai conter todos os recursos
+          necessários para a funcionalidade específica do app, isto é, o gerenciamento
+          de usuários da aplicação.
+        </p>
+
+        <pre>
+          <code class="language-treeview">
+            pro_waiter/
+            |-- pro_waiter/
+            |   |-- __init__.py
+            |   |-- asgi.py
+            |   |-- settings.py
+            |   |-- urls.py
+            |   `-- wsgi.py
+            |-- usuarios/
+            |   |-- migrations/
+            |   |   `-- __init__.py
+            |   |-- __init__.py
+            |   |-- admin.py
+            |   |-- apps.py
+            |   |-- models.py
+            |   |-- tests.py
+            |   `-- views.py
+            `-- manage.py
+          </code>
+        </pre>
+
+        <p>
+          Uma vez criado o app, precisamos adicioná-lo à lista de apps instalados
+          presente no arquivo <i>settings.py</i>, que fica na pasta <i>pro_waiter</i>.
+        </p>
+
+        <pre>
+          <code class=" language-python">
+            # pro_waiter/settings.py
+
+            ...
+
+            INSTALLED_APPS = [
+                'django.contrib.admin',
+                'django.contrib.auth',
+                'django.contrib.contenttypes',
+                'django.contrib.sessions',
+                'django.contrib.messages',
+                'django.contrib.staticfiles',
+
+                #Local
+                'usuarios.apps.UsuariosConfig', # novo
+            ]
+
+            ...
+          </code>
+        </pre>
+        <hr>
+      </section>
+
+      <section id="passo-5">
+        <h1>Passo 5: Criando o modelo de usuário da aplicação</h1>
+        <p>
+          Nossa aplicação vai permitir que usuários (funcionários do restaurante)
+          possam ter uma conta, fazer login e logout. Isso significa que vamos
+          precisar implantar um sistema de autenticação.
+        </p>
+        <p>
+          Por padrão, os usuários da aplicação são representados através de
+          objetos <b>User</b>, que, por padrão, possuem os seguintes atributos:
+        </p>
+
+        <ul>
+          <li>username</li>
+          <li>password</li>
+          <li>email</li>
+          <li>first_name</li>
+          <li>last_name</li>
+        </ul>
+
+        <p>
+          Este modelo de usuário é definido em um app que vem pré-instalado nas
+          aplicacões Django criadas com o comando <b>django-admin startproject ...</b>
+          chamado <b>auth</b>.
+        </p>
+
+        <p>
+          Se você observar a lista <b>INSTALLED_APPS</b>, no arquivo <b>settings.py</b>,
+          verá que este app está lá! E é através dele que nós vamos gerenciar os
+          usuários da nossa aplicação.
+        </p>
+
+        <p>
+          Existem muitos casos em que o modelo de usuário padrão não é suficiente
+          para representar os usuários da sua aplicação. Por exemplo, talvez você
+          queira armazenar dados de endereço, data de nascimento, gênero ou CPF
+          dos seus usuários. É por isso que nós podemos criar os nossos próprios
+          modelos de usuário.
+        </p>
+
+        <p>
+          Esses modelos de usuários customizados podem estender a funcionalidade
+          do modelo de usuário padrão, ou podem ser definições de usuários feitas
+          do zero.
+        </p>
+
+        <p>
+          Em nosso caso, nós faremos algumas modificações no modelo de usuário
+          padrão. Nós não precisamos do atributo <b>username</b>, pois queremos
+          que os usuários possam fazer o login na aplicação apenas com o seu
+          endereço de e-mail, assim eles não precisarão se lembrar de mais uma
+          informação (nome de usuário) para poderem utilizá-la.
+        </p>
+
+        <p>
+          Para definir o modelo de usuário da nossa aplicação, vamos definir as
+          seguintes classe no arquivo <b>models.py</b>:
+        </p>
+        <pre>
+          <code class="language-python">
+            #usuarios/models.py
+
+            from django.db import models
+            from django.contrib.auth.base_user import BaseUserManager
+            from django.contrib.auth.models import AbstractUser
+
+
+            class UsuarioManager(BaseUserManager):
+                def create_user(self, email, password, **extra_fields):
+                    if not email:
+                        raise ValueError("O endereço de e-mail deve ser fornecido")
+                    email = self.normalize_email(email)
+                    user = self.model(email=email, **extra_fields)
+                    user.set_password(password)
+                    user.save()
+                    return user
+
+                def create_superuser(self, email, password, **extra_fields):
+                    extra_fields.setdefault('is_staff', True)
+                    extra_fields.setdefault('is_superuser', True)
+                    extra_fields.setdefault('is_active', True)
+
+                    if extra_fields.get('is_staff') is not True:
+                        raise ValueError("Superusers devem ter o campo is_staff=True.")
+                    if extra_fields.get('is_superuser') is not True:
+                        raise ValueError("Superusers devem ter o campo is_superuser=True.")
+                    return self.create_user(email, password, **extra_fields)
+
+            class Usuario(AbstractUser):
+                username = None
+                email = models.EmailField(unique=True)
+
+                USERNAME_FIELD = 'email'
+                REQUIRED_FIELDS = []
+
+                objects = UsuarioManager()
+
+                def __str__(self):
+                    return self.email
+
+          </code>
+        </pre>
+
+        <p>
+          Primeiramente nós definimos um novo manager para o nosso modelo de usuário:
+          <b>UsuarioManager</b>, que estende a classe <b>BaseUserManager</b>.
+          Nesta classe, nós definimos como deve ser feito o registro de novos usuários
+          através dos métodos <b>create_user()</b> e <b>create_superuser()</b>.
+        </p>
+
+        <p>
+          A segunda classe definida é o modelo que representará os usuários da nossa
+          aplicação: <b>Usuario</b>.
+          Para que a classe estenda a funcionalidade do usuário padrão do Django,
+          ela deve estender a classe <b>AbstractUser</b>.
+        </p>
+
+        <p>
+          Além disso, nós especificamos que nosso modelo de usuário não vai possuir
+          um <b>username</b>, ao contrário do que especifica a classe AbstractUser.
+          Nós também especificamos que o atributo <b>email</b> deve ser único entre
+          usuários. Dessa forma não será possível que dois usuários possuam o mesmo
+          endereço de email.
+        </p>
+
+        <p>
+          Através da variável <b>USERNAME_FIELD</b> nós definimos que o campo
+          <b>email</b> será utilizado para autenticar os usuários da nossa aplicação.
+          E com a variável <b>REQUIRED_FIELDS = []</b> nós especicamos que não é
+          necessário armazenar mais atributos além dos atributos <b>email</b> e
+          <b>password</b>, que são necessários por padrão.
+        </p>
+
+        <p>
+          Já com <b>objects = UsuarioManager()</b>, nós substituimos o manager
+          padrão do nosso modelo, pelo manager que nós criamos anteriormente.
+        </p>
+
+        <p>
+          Por último, através do método <b>__str__()</b> nós definimos que a
+          representação dos nossos usuários na forma de string deverá ser feita
+          através do e-mail destes.
+        </p>
+
+        <p>
+          Um último passo bastante importante é que quando um novo modelo de usuário
+          é definido, precisamos informar ao Django que não queremos utilizar o
+          modelo de usuário padrão, mas sim o que nós definimos. Podemos fazer isso
+          definindo a variável <b>AUTH_USER_MODEL</b> no arquivo <b>settings.py</b>.
+        </p>
+
+        <pre>
+          <code class="language-python">
+            # pro_waiter/settings.py
+
+            ...
+
+            AUTH_USER_MODEL = 'usuarios.Usuario'
+
+          </code>
+        </pre>
+
+        <p>
+          É muito importante que essas configurações sejam realizadas antes de
+          executar o comando <b>migrate</b> pela primeira vez.
+        </p>
+
+        <p>
+          Agora que todas essas configurações estão prontas, vamos criar um
+          novo arquivo de migrações para o app <b>usuarios</b> e aplicar essas
+          migrações. No terminal de comando, execute os seguintes comandos:
+        </p>
+
+        <pre>
+          <code class="language-python">
+            python manage.py makemigrations usuarios
+          </code>
+        </pre>
+
+        <p>
+          Depois disso, vamos aplicar as migrações:
+        </p>
+
+        <pre>
+          <code class="language-python">
+            python manage.py migrate
+          </code>
+        </pre>
+        <hr>
+      </section>
+
+      <section id="passo-6">
+        <h1>Passo 6: Definindo os formulários para criação e edição de usuários no admin</h1>
+        <p>
+          Para que os formulários de criação e edição de usuários no <b>admin</b>
+          da nossa aplicação possam refletir os atributos do modelo de usuário
+          que nós definimos, precisamos criar novos formulários e especificar
+          que queremos utilizá-los para gerenciar usuários.
+        </p>
+
+        <p>
+          Para isso, vamos criar um novo arquivo chamado <b>forms.py</b> dentro do
+          app <b>usuarios</b>.
+        </p>
+        <pre>
+          <code class="language-treeview">
+            pro_waiter/
+            |-- pro_waiter/
+            |   |-- __init__.py
+            |   |-- asgi.py
+            |   |-- settings.py
+            |   |-- urls.py
+            |   `-- wsgi.py
+            |-- usuarios/
+            |   |-- migrations/
+            |   |   `-- __init__.py
+            |   |-- __init__.py
+            |   |-- admin.py
+            |   |-- apps.py
+            |   |-- forms.py #novo
+            |   |-- models.py
+            |   |-- tests.py
+            |   `-- views.py
+            `-- manage.py
+          </code>
+        </pre>
+
+        <p>
+          Dentro desse arquivo, vamos definir as seguintes classes para representar
+          os formulários de criação e edição de usuários:
+        </p>
+
+        <pre>
+          <code class="language-python">
+            # usuarios/forms.py
+
+
+            from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+            from django.contrib.auth import get_user_model
+
+            class CustomUserCreationForm(UserCreationForm):
+
+                class Meta:
+                    model = get_user_model()
+                    fields = ('email',)
+
+            class CustomUserChangeForm(UserChangeForm):
+
+                class Meta:
+                    model = get_user_model()
+                    fields = ('email',)
+          </code>
+        </pre>
+
+        <p>
+          Agora precisamos informar o <b>admin</b> que os formulários que criamos
+          deverão ser utilizados para criar e editar usuários. Para isso, façamos
+          as seguintes alterações no arquivo <b>admin.py</b> do app <b>usuarios</b>:
+        </p>
+
+       <pre>
+          <code class="language-python">
+            # usuarios/admin.py
+
+
+            from django.contrib import admin
+            from django.contrib.auth.admin import UserAdmin
+            from .forms import CustomUserCreationForm, CustomUserChangeForm
+            from django.contrib.auth import get_user_model
+
+            Usuario = get_user_model()
+
+            class CustomUserAdmin(UserAdmin):
+                add_form = CustomUserCreationForm
+                form = CustomUserChangeForm
+                model = Usuario
+                list_display = ('email', 'is_staff', 'is_active')
+                fieldsets = (
+                    (None, {'fields': ('email', 'password')}),
+                    ('Permissions', {'fields': ('is_staff', 'is_active')}),
+                )
+                add_fieldsets = (
+                    (None, {
+                        'classes': ('wide',),
+                        'fields': ('email', 'password1', 'password2', 'is_staff', 'is_active')}
+                    ),
+                )
+                search_fields = ('email',)
+                ordering = ('email', )
+
+            admin.site.register(Usuario, CustomUserAdmin)
+          </code>
+       </pre>
+
+       <p>
+         Agora podemos criar um novo <b>superuser</b> para acessar o <b>admin</b>
+         e verificar se tudo está funcionando como o esperado.
+       </p>
+
+       <p>
+         No terminal de comando, execute o seguinte comando e preencha as
+         informações solicitadas:
+       </p>
+       <pre>
+         <code class="language-python">
+           python manage.py createsuperuser
+         </code>
+       </pre>
+
+       <p>
+         Veja que o Python solicitou apenas um email e uma senha, e não um nome
+         de usuário como de costume.
+       </p>
+
+       <p>
+         Agora, para acessar o <b>admin</b>, vamos iniciar o servidor de testes:
+       </p>
+
+       <pre>
+         <code class="language-python">
+           python manage.py runserver
+         </code>
+       </pre>
+
+       <p>
+         Agora acesse a URL <b>http://127.0.0.1:8000/admin/</b> em seu navegador,
+         preencha o formulário de login com os dados do superuser que você
+         acabou de criar e clique em <b>Users</b> para verificar que tudo
+         está funcionando corretamente.
+       </p>
+       <hr>
+      </section>
+
+      <section id="passo-7">
+        <h1>Passo 7: Logando usuários</h1>
+        <p>
+          Nossa aplicação já é capaz de registrar usuários através do <b>Admin</b>,
+          mas agora nós vamos possibilitar que usuários registrados possam fazer
+          o login em nosso sistema através de sua conta.
+        </p>
+
+        <p>
+          Para isso, nós vamos utilizar uma Class Based View pronta do Django,
+          que será responsável por autenticar usuários.
+        </p>
+
+        <p>
+            Primeiramente, vamos fazer uma modificação no arquivo <b>urls.py</b>
+            do projeto, para que qualquer URL do tipo <b>http://HOST/usuarios/</b>
+            seja resolvida por um arquivo de URL's próprio do app <b>usuários.</b>
+        </p>
+
+        <pre>
+          <code class="language-python">
+            # pro_waiter/urls.py
+
+            from django.contrib import admin
+            from django.urls import path, include # novo
+
+            urlpatterns = [
+                path('admin/', admin.site.urls),
+                path('usuarios/', include('usuarios.urls')), # novo
+            ]
+          </code>
+        </pre>
+
+        <p>
+          Agora vamos criar um novo arquivo <b>urls.py</b> dentro do diretóro do
+          app <b>usuarios</b>.
+        </p>
+
+        <pre>
+          <code class="language-python">
+            # usuarios/urls.py
+
+
+            from django.urls import path
+            from . import views
+
+            urlpatterns = [
+                path('entrar/', views.LoginUsuario.as_view(), name='entrar'),
+            ]
+
+          </code>
+        </pre>
+
+        <p>
+          Aqui nós definimos que ao acessar a url <b>http://HOST/usuarios/entrar/</b>
+          a Class Based View <b>LoginUsuario</b> será chamada.
+        </p>
+
+        <p>
+          No passo anterior nós especificamos uma view que ainda não existe (LoginUsuario).
+          Vamos, então, criá-la no arquivo <b>views.py</b> do app <b>usuarios</b>.
+        </p>
+
+        <pre>
+          <code class="language-python">
+            # usuarios/views.py
+
+            from django.contrib.auth.views import LoginView
+
+            class LoginUsuario(LoginView):
+                template_name = 'usuarios/entrar.html'
+          </code>
+        </pre>
+
+        <p>
+          O único atributo que nós especificamos é o <b>template_name</b>. Através
+          dele nós especificamos o nome do template (que ainda será criado) que será
+          renderizado para mostrar o formulário de login de usuários. Vamos, agora,
+          criar esse template.
+        </p>
+
+        <p>
+          Dentro do diretório do app <b>usuarios</b> vamos criar uma nova pasta
+          chamada <b>templates</b>. E dentro da pasta <b>templates</b>, vamos criar
+          outra pasta chamada <b>usuarios</b>. E nesta pasta nós criaremos o
+          template <b>entrar.html</b>, especificado no passo anterior.
+        </p>
+
+        <pre>
+          <code class="language-markup">
+            &lt;!-- usuarios/templates/usuarios/entrar.html -->
+
+            &lt;!doctype html>
+            &lt;html lang="en">
+              &lt;head>
+                &lt;!-- Required meta tags -->
+                &lt;meta charset="utf-8">
+                &lt;meta name="viewport" content="width=device-width, initial-scale=1">
+
+                &lt;!-- Bootstrap CSS -->
+                &lt;link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+                &lt;title>Entrar&lt;/title>
+              &lt;/head>
+              &lt;body>
+                &lt;div class="container">
+                  &lt;h1>Entrar&lt;/h1>
+                  &lt;p>
+                    Preencha o formulário para fazer o login.
+                  &lt;/p>
+                  &lt;form method="post">
+                    {% csrf_token %}
+                    {{ form }}
+                    &lt;br>
+                    &lt;input type="submit" value="Entrar">
+                  &lt;/form>
+                &lt;/div>
+
+                &lt;!-- Option 1: Bootstrap Bundle with Popper -->
+                &lt;script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">&lt;/script>
+              &lt;/body>
+            &lt;/html>
+
+          </code>
+        </pre>
+
+        <p>
+          A view que nós criamos no passo anterior, LoginUsuario, que herda de
+          LoginView renderiza o template especificado através do atributo
+          <b>tempalte_name</b> com a variável de contexto <b>form</b> para carregar
+          o formulário de login. Além disso, a view trata os dados do formulário
+          preenchido autenticando o usuário e fazendo o login, ou informando
+          uma mensagem de erros casso o formulário seja erroneamente preenchido.
+        </p>
+
+        <p>
+          Agora, podemos visitar a URL <b>http://HOST/usuarios/entrar/</b> para
+          ver o formulário de login.
+        </p>
+
+        <img src="imagens/login_form_1.jpg" style="width: 70%; margin: auto;">
+
+        <p>
+          É... Lá está o formulário. Porém a aparência dele é horrível. Vamos
+          utilizar um pacote para melhorar a forma como o formulário é renderizado.
+        </p>
+
+        <p>
+          No terminal de comando, com o ambiente virtual do projeto ativado,
+          execute o seguinte comando para baixar no ambiente o pacote
+        </p>
+
+        <pre class="language-python">
+          <code class="language-python">
+            pip install django-crispy-forms
+          </code>
+        </pre>
+
+        <p>
+          Agora vamos fazer as seguintes modificações no arquivo <b>settings.py</b>
+          para que o Django tenha conhecimento do pacote instalado.
+        </p>
+
+        <pre>
+          <code class=" language-python">
+            # pro_waiter/settings.py
+
+
+            INSTALLED_APPS = [
+                'django.contrib.admin',
+                'django.contrib.auth',
+                'django.contrib.contenttypes',
+                'django.contrib.sessions',
+                'django.contrib.messages',
+                'django.contrib.staticfiles',
+
+                # 3rd party
+                'crispy_forms', #novo
+
+                # Local
+                'usuarios.apps.UsuariosConfig',
+            ]
+
+            # django-crispy-forms
+            CRISPY_TEMPLATE_PACK = 'bootstrap4' #novo
+
+          </code>
+        </pre>
+
+        <p>
+          Com o pacote instalado, só precisamos carregar as tags crispy no inicio
+          do template <b>entrar.html</b> e carregar o <b>form</b> com o filtro
+          <b>crispy</b>.
+        </p>
+
+        <pre>
+          <code class="language-markup">
+            &lt;!-- usuarios/templates/usuarios/entrar.html -->
+
+            &lt;!doctype html>
+            &lt;!-- Novo -->
+            {% load crispy_forms_tags %}
+
+            &lt;html lang="en">
+              &lt;head>
+                &lt;!-- Required meta tags -->
+                &lt;meta charset="utf-8">
+                &lt;meta name="viewport" content="width=device-width, initial-scale=1">
+
+                &lt;!-- Bootstrap CSS -->
+                &lt;link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+                &lt;title>Entrar&lt;/title>
+              &lt;/head>
+              &lt;body>
+                &lt;div class="container">
+                  &lt;h1>Entrar&lt;/h1>
+                  &lt;p>
+                    Preencha o formulário para fazer o login.
+                  &lt;/p>
+                  &lt;form method="post">
+                    {% csrf_token %}
+
+                    &lt;!-- Novo -->
+                    {{ form|crispy }}
+
+                    &lt;br>
+                    &lt;input type="submit" value="Entrar">
+                  &lt;/form>
+                &lt;/div>
+
+                &lt;!-- Option 1: Bootstrap Bundle with Popper -->
+                &lt;script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">&lt;/script>
+              &lt;/body>
+            &lt;/html>
+
+          </code>
+        </pre>
+
+        <p>
+          Vamos iniciar o servidor de teste novamente e voltar para a página de login.
+        </p>
+
+        <p>
+          Agora o formulário ficou muito melhor.
+        </p>
+
+        <img src="imagens/login_form_2.jpg" style="width: 70%; margin: auto;">
+
+        <p>
+          Por fim, vamos adicionar uma classe bootstrap ao botão e margem superior
+          no container.
+        </p>
+
+        <pre>
+          <code class="language-markup">
+            &lt;!-- usuarios/templates/usuarios/entrar.html -->
+
+            &lt;!doctype html>
+            {% load crispy_forms_tags %}
+
+            &lt;html lang="en">
+              &lt;head>
+                &lt;!-- Required meta tags -->
+                &lt;meta charset="utf-8">
+                &lt;meta name="viewport" content="width=device-width, initial-scale=1">
+
+                &lt;!-- Bootstrap CSS -->
+                &lt;link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+                &lt;title>Entrar&lt;/title>
+              &lt;/head>
+              &lt;body>
+                &lt;div class="container mt-5">
+                  &lt;h1>Entrar&lt;/h1>
+                  &lt;p>
+                    Preencha o formulário para fazer o login.
+                  &lt;/p>
+                  &lt;form method="post">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    &lt;br>
+                    &lt;input type="submit" class="btn btn-success" value="Entrar">
+                  &lt;/form>
+                &lt;/div>
+
+                &lt;!-- Option 1: Bootstrap Bundle with Popper -->
+                &lt;script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">&lt;/script>
+              &lt;/body>
+            &lt;/html>
+
+          </code>
+        </pre>
+
+        <p>
+          Há, ainda, uma última configuração a ser realizada. Se você tentar fazer
+          o login através deste formulário com os dados corretos, verá que um
+          erro ainda existe:
+        </p>
+
+        <img src="imagens/login_error.png" style="width: 70%; margin: auto;">
+
+        <p>
+          Este erro está relacionado com a página que o usuário recém logado
+          é redirecionado. Por padrão, após o login o Django tenta acessar a página
+          na URL <b>http://HOST/accounts/profile/</b>. Porém essa URL não está
+          definida na nossa aplicação. Portanto, vamos alterar o redirecionamento
+          após o login.
+        </p>
+
+        <p>
+          Para, isso, precisamos especificar o nome de uma URL válida na variável
+          <b>LOGIN_REDIRECT_URL</b> do arquivo <b>settings.py</b>.
+        </p>
+
+        <pre>
+          <code class="language-python">
+            # pro_waiter/settings.py
+
+            ...
+
+            LOGIN_REDIRECT_URL = 'painel_garcom'
+
+            ...
+          </code>
+        </pre>
+
+        <p>
+          Veja que nós especificamos o nome de uma URL que ainda não existe,
+          ou seja, um erro ainda será gerado após o login,
+          mas vamos criá-la nos próximos passos.
+        </p>
+
+        <hr>
+      </section>
+
+      <h1>Obrigado</h1>
+      <p>
+        Parabéns por ter chegado até aqui! Nos vemos no próximo tutorial.
+      </p>
+      <h3>Nossas redes sociais</h3>
+      <a href="https://www.youtube.com/channel/UCSqHHdFpadrJNu6UnYdUhzw">Youtube</a>
+      <a href="https://www.instagram.com/universipython/">Instagram</a>
+
+      <footer class="mt-auto text-white-50 text-center">
+        <p>UniversiPython</p>
+      </footer>
+    </div>
+
+    <script src="prism.js"></script>
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+  </body>
+</html>
