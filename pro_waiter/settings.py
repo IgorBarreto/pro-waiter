@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # Local
     "usuarios.apps.UsuariosConfig",
+    "crispy_forms",
 ]
 
 MIDDLEWARE = [
@@ -127,3 +128,7 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = "usuarios.Usuario"
+
+CRISPY_TEMPLATES_PACK = "Bootstrap4"
+
+LOGIN_REDIRECT_URL = "painel_garcon"
