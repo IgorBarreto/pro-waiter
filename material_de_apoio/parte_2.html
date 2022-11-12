@@ -1,0 +1,587 @@
+<!doctype html>
+<html lang="en" class="h-100">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="prism.css">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+
+    <title>ProWaiter | Parte 2</title>
+  </head>
+  <body class="h-100 text-left text-white bg-dark">
+    <div class="container d-flex w-100 h-100 p-3 mx-auto flex-column">
+      <header class="mb-auto">
+        <div>
+          <h1>ProWaiter</h1>
+          <h3 class="float-md-start mb-0">Parte 2: Criando um sistema de atendimento e gerenciamento para restaurantes.</h3>
+        </div>
+      </header>
+      <div style="margin-top:30px"></div>
+
+      <section id="passo-8">
+        <h1>Passo 8: Criando o app restaurante e seus modelos</h1>
+        <p>
+          Em nossa aplicação existirão diversos apps, cada um com sua
+          funcionalidade específica. A objetivo do app <b>usuarios</b> era
+          cuidar do gerenciamento de usuários da aplicação, e ele já faz isso
+          muito bem. Por isso, vamos, agora, criar o segundo app da aplicação -
+          o app <b>restaurante</b>.
+        </p>
+
+        <p>
+          Este app será responsável por definir diversos modelos que serão
+          utilizados por outros apps: Mesa, Comanda, Categoria, ItemCardapio e
+          ItemPedido.
+        </p>
+
+        <p>
+          Para criar o app, vamos executar o seguinte comando no terminal de comando
+          (não se esqueça de garantir que o ambiente virtual do projeto está ativo
+          e que o diretório ativo no terminal é o diretório do projeto que contem
+          o arquivo manage.py).
+        </p>
+        <pre>
+          <code class="language-python">
+            python manage.py startapp restaurante
+          </code>
+        </pre>
+        <p>
+          Precisamos especificar para o Django que o app deve ser utilizado na
+          aplicação. Fazemos isso adicionado o app na lista <b>INSTALLED_APPS</b>
+          existente no arquivo <b>settings.py</b>:
+        </p>
+
+        <pre>
+          <code class="language-python">
+            # pro_waiter/settings.py
+
+            ...
+
+            INSTALLED_APPS = [
+                'django.contrib.admin',
+                'django.contrib.auth',
+                'django.contrib.contenttypes',
+                'django.contrib.sessions',
+                'django.contrib.messages',
+                'django.contrib.staticfiles',
+
+                # 3rd party
+                'crispy_forms',
+
+                #Local
+                'usuarios.apps.UsuariosConfig',
+                'restaurante.apps.RestauranteConfig', # novo
+            ]
+
+            ...
+          </code>
+        </pre>
+
+        <p>
+          Agora vamos ter uma visão geral dos modelos que vão compor esse app:
+        </p>
+
+        <h4>Modelo Mesa</h4>
+        <p>
+          O modelo <b>Mesa</b> será utilizado para representar as mesas do restaurante,
+          que possuirão os seguintes atributos:
+        </p>
+        <ul>
+          <li>
+            <h6>numero</h6>
+            <p>
+              O atributo <b>numero</b> será uma string que armazena o número da mesa.
+              Deve ser único entre mesas.
+            </p>
+          </li>
+          <li>
+            <h6>slug</h6>
+            <p>
+              O atributo <b>slug</b> será uma sequência aleatória de caracteres
+              (apenas letras, sublinhado e hífen) e será utilizado para criar
+              URLs para cada mesa. Também deverá ser único entre mesas.
+            </p>
+          </li>
+        </ul>
+
+        <h4>Modelo Comanda</h4>
+        <p>
+          O modelo <b>Comanda</b> será utilizado para representar as comandas
+          do restaurante. Cada visita de um cliente ao restaurante é registrada
+          através de uma comanda, que será utilizada para armazenar principalmente
+          os itens consumidos. Só é possível existir apenas uma comanda aberta
+          por cada mesa.
+        </p>
+        <p>
+          Os atributos das comandas serão os seguintes:
+        </p>
+        <ul>
+          <li>
+            <h6>codigo</h6>
+            <p>
+              O <b>codigo</b> da comanda será uma sequência aleatória de caracteres
+              similiar ao atributo <b>slug</b> do modelo Mesa. Deverá ser único
+              para cada comanda e será gerado no momento da abertura de uma nova
+              comanda.
+            </p>
+          </li>
+          <li>
+            <h6>mesa</h6>
+            <p>
+              O atributo <b>mesa</b> das comandas é uma referência a uma
+              instância do modelo <b>Mesa</b>, citado anteriormente. Cada mesa
+              poderá estar associada com diversas comandas; por outro lado,
+              cada comanda poderá estar associado com apenas uma mesa.
+            </p>
+          </li>
+          <li>
+            <h6>abertura</h6>
+            <p>
+              Este campo armazena o dia e o horário em que a comanda foi aberta.
+            </p>
+          </li>
+          <li>
+            <h6>fechamento</h6>
+            <p>
+              Similiar ao atributo anterior, o campo <b>fechamento</b> armazena
+              o dia e o horário em que a comanda foi fechada.
+            </p>
+          </li>
+          <li>
+            <h6>status</h6>
+            <p>
+              Este atributo armazena o status atual da comanda, que poderá ser
+              'aberta' ou 'fechada'. Por padrão, este campo é iniciado com o
+              valor 'aberta'.
+            </p>
+          </li>
+          <li>
+            <h6>valor_total</h6>
+            <p>
+              Como o nome deixa claro, este atributo armazena o valor total
+              dos itens consumidos na comanda. O campo é atualizado cada vez
+              que um novo pedido é realizado.
+            </p>
+          </li>
+
+
+
+        </ul>
+
+        <h4>Modelo Categoria</h4>
+        <p>
+          Este modelo será utilizado para agrupar itens do cardápio similares.
+          Por exemplo: bebidas, pratos quentes, pratos frios, etc. O modelo
+          possuirá os seguintes atributos:
+        </p>
+        <ul>
+          <li>
+            <h6>nome</h6>
+            <p>
+              É o nome da categoria.
+            </p>
+          </li>
+          <li>
+            <h6>descricao</h6>
+            <p>
+              É um campo opcional que pode ser utilizado para descrever os itens
+              agrupados pela categoria.
+            </p>
+          </li>
+          <li>
+            <h6>ordem</h6>
+            <p>
+              É um número associado com cada categoria que será utilizado para
+              definir a ordem em que as categorias e os itens  por ela agrupados
+              serão mostrados no cardápio do restaurante.
+            </p>
+          </li>
+
+        </ul>
+
+        <h4>Modelo ItemCardapio</h4>
+        <p>
+          Este modelo seerá utilizado para representar os itens que compõem o
+          cardápio do restaurante. Os atributos do modelo <b>ItemCardapio</b>
+          são os seguintes:
+        </p>
+        <ul>
+          <li>
+            <h6>item</h6>
+            <p>
+              Este campo armazena o nome do item.
+            </p>
+          </li>
+          <li>
+            <h6>categoria</h6>
+            <p>
+              Este atributo armazena uma instância do modelo <b>Categoria</b>,
+              citado anteriormente. Cada item do cardápio poderá estar associado
+              com apenas uma categoria.
+            </p>
+          </li>
+          <li>
+            <h6>preco</h6>
+            <p>
+              Obviamente, este campo armazena o preço do item.
+            </p>
+          </li>
+          <li>
+            <h6>ativo</h6>
+            <p>
+              Este campo é utilizado para especificar se o item deve ou não
+              aparecer como uma opção no cardápio. Por padrão o seu valor é 'True'.
+              Mas se o item deixar de ser produzido no restaurante,
+              o campo deverá ser alterado para 'False'.
+            </p>
+          </li>
+          <li>
+            <h6>necessita_preparo</h6>
+            <p>
+              Este campo armazena True ou False, e determina se o item precisa
+              ser preparado (como um prato principal, por exemplo) ou se basta
+              entragar o pedido (como uma bebida).
+            </p>
+          </li>
+          <li>
+            <h6>descricao</h6>
+            <p>
+              Este campo opcional armazena a descrição do item. Pode ser utilizado
+              para descrever, por exemplo,  os ingredientes do item, ou quantas pessoas o
+              prato pode servir.
+            </p>
+          </li>
+        </ul>
+
+        <h4>Modelo ItemPedido</h4>
+        <p>
+          Este modelo descreve cada item que foi pedido por um cliente e
+          registrado em uma comanda. O modelo é composto pelos seguintes
+          atributos:
+        </p>
+        <ul>
+          <li>
+            <h6>item</h6>
+            <p>
+              Este campo é uma referência para alguns dos itens do cardápio,
+              afinal, um item só pode ser pedido se este estiver no cardápio do
+              restaurante.
+            </p>
+          </li>
+          <li>
+            <h6>preco</h6>
+            <p>
+              Este atributo armazena o preco do item no momento do pedido.
+              Os preços dos itens do cardápio podem ser alterados com o tempo,
+              este campo registra qual era o preço do item no momento em que foi
+              pedido.
+            </p>
+          </li>
+          <li>
+            <h6>comanda</h6>
+            <p>
+              É uma referência a uma intância do modelo <b>Comanda</b>. Cada item
+              pedido deve estar associado com uma, e apenas uma, comanda.
+              Dessa forma será possível saber qual foi o valor gasto em uma
+              comanda.
+            </p>
+          </li>
+          <li>
+            <h6>status</h6>
+            <p>
+              Um item pedido pode estar em preparo, pronto ou entregue. Este
+              campo armazena qual é o status do item.
+            </p>
+          </li>
+          <li>
+            <h6>obs</h6>
+            <p>
+              Este campo opcional armazena possíveis observações para o pedido.
+              Por exemplo, talvez algum cliente tenha pedido para retirar a
+              cebola.
+            </p>
+          </li>
+          <li>
+            <h6>hr_pedido</h6>
+            <p>
+              Armazena o dia e horário em que o pedido foi feito.
+            </p>
+          </li>
+          <li>
+            <h6>hr_entregue</h6>
+            <p>
+              Armazena o dia e o horário em que o pedido foi entregue ao cliente.
+            </p>
+          </li>
+        </ul>
+
+        <h4>Criando os modelos</h4>
+        <p>
+          Agora que você já sabe quais são os modelos que serão definidos no app
+          <b>restaurante</b>, vamos criá-los no arquivo <b>models.py</b> do app.
+        </p>
+
+        <pre>
+          <code class="language-python">
+            # restaurante/models.py
+
+
+            from django.db import models
+            from django.utils.crypto import get_random_string
+            from django.utils import timezone
+
+            class Mesa(models.Model):
+
+                numero = models.CharField(max_length=3, unique=True)
+                slug = models.SlugField(max_length=8, blank=True, unique=True)
+
+                def __str__(self):
+                    return f"Mesa {self.numero}"
+
+
+                def save(self, *args, **kwargs):
+                    self.slug_save()
+                    super(Mesa, self).save(*args, **kwargs)
+
+
+                def slug_save(self):
+                    if not self.slug:
+                        self.slug = get_random_string(8)
+                        slug_is_wrong = True
+                        while slug_is_wrong:
+                            slug_is_wrong = False
+                            other_objs_with_slug = type(self).objects.filter(slug=self.slug)
+                            if len(other_objs_with_slug) > 0:
+                                slug_is_wrong = True
+                            if slug_is_wrong:
+                                self.slug = get_random_string(8)
+
+
+            class Comanda(models.Model):
+                OPCOES_STATUS = (
+                    ('aberta', 'Aberta'),
+                    ('fechada', 'Fechada')
+                )
+                codigo = models.SlugField(max_length=8, blank=True, unique=True)
+                mesa = models.ForeignKey(Mesa, null=True, on_delete=models.SET_NULL)
+                abertura = models.DateTimeField(auto_now_add=True) # Alterar timezone para America/Sao_Paulo
+                fechamento = models.DateTimeField(blank=True, null=True)
+                status = models.CharField(max_length=7, choices=OPCOES_STATUS, default='aberta')
+                valor_total = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
+
+
+                def save(self, *args, **kwargs):
+                    self.slug_save()
+                    super(Comanda, self).save(*args, **kwargs)
+
+
+                def slug_save(self):
+                    if not self.codigo:
+                        self.codigo = get_random_string(8)
+                        slug_is_wrong = True
+                        while slug_is_wrong:
+                            slug_is_wrong = False
+                            other_objs_with_slug = type(self).objects.filter(codigo=self.codigo)
+                            if len(other_objs_with_slug) > 0:
+                                slug_is_wrong = True
+                            if slug_is_wrong:
+                                self.codigo = get_random_string(8)
+
+
+                def atualiza_total(self):
+                    itens = ItemPedido.objects.filter(comanda=self)
+                    novo_total = 0.00
+                    for item in itens:
+                        novo_total += float(item.preco)
+                    self.valor_total = novo_total
+                    self.save()
+
+                def __str__(self):
+                    return f"Comanda {self.codigo}"
+
+
+            class Categoria(models.Model):
+                nome = models.CharField(max_length=55)
+                descricao = models.TextField(blank=True)
+                ordem = models.IntegerField(default=0, blank=True)
+
+                class Meta:
+                    ordering = ('ordem', 'nome')
+
+                def __str__(self):
+                    return self.nome
+
+
+            class ItemCardapio(models.Model):
+                item = models.CharField(max_length=100)
+                categoria = models.ForeignKey(Categoria, null=True, blank=True, on_delete=models.SET_NULL)
+                preco = models.DecimalField(max_digits=5, decimal_places=2)
+                ativo = models.BooleanField(default=True)
+                necessita_preparo = models.BooleanField(default=True)
+                descricao = models.TextField(blank=True)
+
+                def __str__(self):
+                    return self.item
+
+
+            class ItemPedido(models.Model):
+                OPCOES_STATUS = (
+                    ('preparo', 'Em Preparo'),
+                    ('pronto', 'Pronto'),
+                    ('entregue', 'Entregue'),
+                )
+                item = models.ForeignKey(ItemCardapio, on_delete=models.PROTECT)
+                preco = models.DecimalField(max_digits=5, decimal_places=2)
+                comanda = models.ForeignKey(Comanda, on_delete=models.PROTECT)
+                status = models.CharField(max_length=10, choices=OPCOES_STATUS, default="preparo")
+                obs = models.TextField(blank=True)
+                hr_pedido = models.DateTimeField(auto_now_add=True)
+                hr_entregue = models.DateTimeField(blank=True, null=True)
+
+                class Meta:
+                    ordering = ('hr_pedido', 'item')
+
+                def pedido_pronto(self):
+                    if self.status == 'preparo':
+                        self.status = 'pronto'
+                        self.save()
+
+                def entregar_pedido(self):
+                    self.status = 'entregue'
+                    self.hr_entregue = timezone.now()
+                    self.save()
+
+                def __str__(self):
+                    return self.item.item
+
+
+          </code>
+        </pre>
+        <hr>
+      </section>
+
+      <section id="passo-9">
+        <h1>Passo 9: Editando o fuso horário da aplicação</h1>
+        <p>
+          Os modelos da nossa aplicação possuem campos de armazenamento de
+          data e hora. Por padrão, o Django armazena datas e horários no UTC
+          (Coordinated Universal Time), que pode ser entendido como o horário
+          universal e padrão, a partir do qual todos os outros fusos horários
+          são calculados.
+        </p>
+        <p>
+          Armazenar o tempo em UTC é uma prática bastante segura e recomendada,
+          porém, o horário universal é diferente do fuso horário brasileiro.
+          Então, para que os templates mostrem os horários armazenados no banco
+          de dados em UTC, convertidos para outro fuso horário, precisamos alterar
+          a configuração <b>TIME_ZONE</b> no arquivo <b>settings.py</b>.
+        </p>
+        <p>
+          Existe uma série de valores que podemos especificar para essa variável,
+          que podem ser verificadas executando o seguinte comando em um interpretador
+          Python:
+        </p>
+        <pre>
+          <code class="language-python">
+            import pytz
+            print(pytz.all_timezones)
+          </code>
+        </pre>
+        <p>
+          Em nosso caso, vamos especifar o valor <b>"America/Sao_Paulo"</b>
+          para a variável <b>TIME_ZONE</b> em <b>settings.py</b>.
+        </p>
+        <pre>
+          <code class="language-python">
+            ...
+
+            TIME_ZONE = "America/Sao_Paulo"
+
+            ...
+          </code>
+        </pre>
+        <p>
+          Dessa forma, o Django continuará armazenando dados de data e hora no
+          formato UTC. Porém, quando esses dados forem exibidos em um template,
+          estarão convertidos para o fuso horário especificado.
+        </p>
+        <hr>
+      </section>
+
+      <section id="passo-10">
+        <h1>Passo 10: Criando e aplicando migrações</h1>
+        <p>
+          Agora que os modelos estão definidos, podemos criar um arquivo de
+          instruções de migrações para que o banco de dados da aplicação
+          esteja de acordo com o que nós definimos no arquivo <b>models.py</b>.
+        </p>
+        <p>
+          Para isso, vamos executar o seguinte comando no terminal de comando:
+        </p>
+        <pre>
+          <code class="language-python">
+            python manage.py makemigrations restaurante
+          </code>
+        </pre>
+
+        <p>
+          Para aplicar as migrações, basta executar o seguinte comando:
+        </p>
+        <pre>
+          <code class="language-python">
+            python manage.py migrate
+          </code>
+        </pre>
+        <hr>
+      </section>
+
+      <section id="passo-11">
+        <h1>Passo 11: Registrando os modelos criados no Admin</h1>
+        <p>
+          Para que seja possível editar dados dos modelos criado através do
+          Admin, precisamos fazer o registro dos mesmos.
+        </p>
+        <p>
+          Para isso, façamos as seguintes modificações no arquivo <b>admin.py</b>
+          do app <b>restaurante</b>.
+        </p>
+        <pre>
+          <code class="language-python">
+            # restaurante/admin.py
+
+
+            from django.contrib import admin
+            from .models import Mesa, Comanda, Categoria, ItemCardapio, ItemPedido
+
+
+            admin.site.register(Mesa)
+            admin.site.register(Comanda)
+            admin.site.register(Categoria)
+            admin.site.register(ItemCardapio)
+            admin.site.register(ItemPedido)
+
+          </code>
+        </pre>
+        <hr>
+      </section>
+
+      <h1>Obrigado</h1>
+      <p>
+        Parabéns por ter chegado até aqui! Nos vemos no próximo tutorial.
+      </p>
+      <h3>Nossas redes sociais</h3>
+      <a href="https://www.youtube.com/channel/UCSqHHdFpadrJNu6UnYdUhzw">Youtube</a>
+      <a href="https://www.instagram.com/universipython/">Instagram</a>
+
+      <footer class="mt-auto text-white-50 text-center">
+        <p>UniversiPython</p>
+      </footer>
+    </div>
+
+    <script src="prism.js"></script>
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+  </body>
+</html>
